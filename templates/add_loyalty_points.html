@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Loyalty Points</title>
+</head>
+<body>
+    <h2>Add Loyalty Points</h2>
+
+    <form method="POST">
+        <label for="user_id">Select User:</label>
+        <select name="user_id" required>
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="points_to_add">Points to Add:</label>
+        <input type="number" name="points_to_add" required min="1">
+
+        <button type="submit">Add Points</button>
+    </form>
+
+    <a href="{{ url_for('admin_portal') }}">Back to Admin Portal</a>
+</body>
+</html>
+

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Loan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Add Loan</h2>
+
+        <form action="{{ url_for('add_loan') }}" method="POST">
+            <div class="form-group">
+                <label for="loan_type">Example select</label>
+                <select class="form-control" id="loan_type" name="loan_type" required>
+                    <option value="" hidden selected disabled>Select the type of Loan</option>
+                    <option value="Pawn">Pawn</option>
+                    <option value="Loan">Loan</option>
+                    <option value="Rent to Buy">Rent to Buy</option>
+                </select>
+            
+            <div class="mb-3">
+                <label for="collateral_item" class="form-label">Collateral Item</label>
+                <input type="text" class="form-control" id="collateral_item" name="collateral_item" required>
+            </div>
+            <div class="mb-3">
+                <label for="loan_amount" class="form-label">Loan Amount</label>
+                <input type="number" step="0.01" class="form-control" id="loan_amount" name="loan_amount" required>
+            </div>
+            <div class="mb-3">
+                <label for="due_date" class="form-label">Due Date</label>
+                <input type="date" class="form-control" id="due_date" name="due_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="user_id" class="form-label">Select User</label>
+                <select class="form-control" id="user_id" name="user_id" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Add Loan</button>
+        </form>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('customer_portal') }}" class="btn btn-primary">Back to Portal</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

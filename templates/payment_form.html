@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log Payment</title>
+</head>
+<body>
+    <h2>Log Payment for {{ loan.item_name }}</h2>
+    <form action="{{ url_for('log_payment', loan_id=loan.id) }}" method="POST">
+        <label for="payment_amount">Payment Amount ($):</label>
+        <input type="number" name="payment_amount" min="0" max="{{ loan.loan_amount }}" required><br>
+        <button type="submit">Log Payment</button>
+    </form>
+    <a href="{{ url_for('admin_portal') }}">Back to Admin Portal</a>
+</body>
+</html>

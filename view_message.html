@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+    <head>234234234</head>
+    <body> <h1>{{ message.subject }}</h1>
+    <div class="message-body">
+        <!-- Render the HTML content from the database -->
+        {{ message.body | safe }}
+    </div>
+
+    <h2>Resplasdsay</h2>
+    <form method="POST" action="{{ url_for('send_message') }}">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="body">Message Body:</label>
+        <textarea id="body" name="body" rows="10" cols="50" required></textarea>
+
+        <button type="submit">Send Message</button>
+    </form> </body>
+</html>
