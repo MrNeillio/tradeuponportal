@@ -16,7 +16,7 @@ from wtforms.validators import DataRequired, NumberRange, DataRequired, Length, 
 from flask import Flask
 from flask_cors import CORS
 from decimal import Decimal
-
+from flask import send_file
 
 
 app = Flask(__name__)
@@ -132,7 +132,10 @@ def load_user(user_id):
    
 
 
-
+#db download
+@app.route('/download-db')
+def download_db():
+    return send_file("database.db", as_attachment=True)
 
 # Message Model 
 
