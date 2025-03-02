@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Loyalty Points</title>
+    <style>
+        .custom-select-wrapper {
+            position: relative;
+        }
+        .custom-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .user-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            display: none;
+            z-index: 1000;
+        }
+        .user-list div {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .user-list div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add Loyalty Points</h2>
+
+    <form method="POST">
+        <label for="user_search">Select User:</label>
+        <div class="custom-select-wrapper">
+            <input type="text" id="user_search" class="custom-select" placeholder="Start typing to search..." required>
+            <div class="user-list" id="user_list">
+                {% for user in users %}
+                    <div class="user-option" data-id="{{ user.id }}">{{ user.username }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Hidden input to store user ID -->
+        <input type="hidden" id="user_id" name="user_id" value="">
+
+        <label for="points_to_add">Points to Add:</label>
+        <input type="number" name="points_to_add" required min="1">
+
+        <button type="submit">Add Points</button>
+    </form>
+
+    <a href="{{ url_for('admin_portal') }}">Back to Admin Portal</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userSearch = document.getElementById('user_search');
+            const userList = document.getElementById('user_list');
+            const userOptions = document.querySelectorAll('.user-option');
+            const userIdField = document.getElementById('user_id');
+
+            // Function to filter user list
+            function filterUsers() {
+                const input = userSearch.value.toLowerCase().trim();
+                let isAnyMatch = false;
+                let matchedUserId = null;
+
+                userOptions.forEach(option => {
+                    const username = option.textContent.toLowerCase();
+                    if (username.includes(input)) {
+                        option.style.display = 'block';
+                        isAnyMatch = true;
+                        if (username === input) {
+                            matchedUserId = option.getAttribute('data-id'); // Store exact match
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+
+                userList.style.display = isAnyMatch ? 'block' : 'none';
+                userIdField.value = matchedUserId || ''; // Set user ID only if there's an exact match
+            }
+
+            // Clear user ID when typing
+            userSearch.addEventListener('input', function () {
+                userIdField.value = ''; // Reset user ID if user types again
+                filterUsers();
+            });
+
+            // Set selected user when clicking an option
+            userOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    userSearch.value = this.textContent;
+                    userIdField.value = this.getAttribute('data-id');
+                    userList.style.display = 'none'; // Hide dropdown after selection
+                });
+            });
+
+            // Prevent form submission if no valid user is selected
+            document.querySelector('form').addEventListener('submit', function (event) {
+                if (!userIdField.value) {
+                    alert('Please select a valid user from the list or enter an exact match.');
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
