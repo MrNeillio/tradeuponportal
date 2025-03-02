@@ -1,0 +1,16 @@
+<form method="POST" action="{{ url_for('log_payment', loan_id=loan.id) }}">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        <label for="amount" class="form-label">Payment Amount:</label>
+        {{ form.amount(class="form-control", id="amount", required=True) }}
+    </div>
+
+    <div class="mb-3">
+        <label for="is_defaulted" class="form-label">Mark as Defaulted</label>
+        <input type="checkbox" name="is_defaulted" class="form-check-input" id="is_defaulted">
+        <label class="form-check-label" for="is_defaulted">Check this if the payment is defaulted</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit Payment</button>
+</form>

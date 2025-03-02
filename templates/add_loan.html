@@ -5,49 +5,162 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Loan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .custom-select-wrapper {
+            position: relative;
+        }
+        .custom-select {
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0.375rem;
+            height: calc(2.25rem + 2px);
+        }
+        .user-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            display: none;
+            z-index: 1000;
+        }
+        .user-list div {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .user-list div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
-<body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show text-center" role="alert" >
+            {{ messages[0][1] }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+{% endwith %}<body style="background-color: #b0e1e7;">
     <div class="container mt-5">
-        <h2>Add Loan</h2>
+        <h2 class="text-center mb-4">Add Loan</h2>
 
-        <form action="{{ url_for('add_loan') }}" method="POST">
-            <div class="form-group">
-                <label for="loan_type">Example select</label>
-                <select class="form-control" id="loan_type" name="loan_type" required>
-                    <option value="" hidden selected disabled>Select the type of Loan</option>
-                    <option value="Pawn">Pawn</option>
-                    <option value="Loan">Loan</option>
-                    <option value="Rent to Buy">Rent to Buy</option>
-                </select>
-            
-            <div class="mb-3">
-                <label for="collateral_item" class="form-label">Collateral Item</label>
-                <input type="text" class="form-control" id="collateral_item" name="collateral_item" required>
-            </div>
-            <div class="mb-3">
-                <label for="loan_amount" class="form-label">Loan Amount</label>
-                <input type="number" step="0.01" class="form-control" id="loan_amount" name="loan_amount" required>
-            </div>
-            <div class="mb-3">
-                <label for="due_date" class="form-label">Due Date</label>
-                <input type="date" class="form-control" id="due_date" name="due_date" required>
-            </div>
-            <div class="mb-3">
-                <label for="user_id" class="form-label">Select User</label>
-                <select class="form-control" id="user_id" name="user_id" required>
-                    {% for user in users %}
-                    <option value="{{ user.id }}">{{ user.username }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div class="card shadow-sm p-4 rounded bg-white">
+            <form action="{{ url_for('add_loan') }}" method="POST">
+                <div class="mb-3">
+                    <label for="loan_type" class="form-label">Loan Type</label>
+                    <select class="form-control" id="loan_type" name="loan_type" required>
+                        <option value="" hidden selected disabled>Select the type of Loan</option>
+                        <option value="Pawn">Pawn</option>
+                        <option value="Loan">Loan</option>
+                        <option value="Rent to Buy">Rent to Buy</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="btn btn-success">Add Loan</button>
-        </form>
-        <div class="text-center mt-4">
+                <div class="mb-3">
+                    <label for="collateral_item" class="form-label">Collateral Item</label>
+                    <input type="text" class="form-control" id="collateral_item" name="collateral_item" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="loan_amount" class="form-label">Loan Amount</label>
+                    <input type="number" step="0.01" class="form-control" id="loan_amount" name="loan_amount" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input type="date" class="form-control" id="due_date" name="due_date" required>
+                </div>
+
+                <div class="mb-3 custom-select-wrapper">
+                    <label for="user_id" class="form-label">Select User</label>
+                    <input type="text" class="form-control" id="user_search" placeholder="Start typing to search" onkeyup="filterUsers()" required>
+                    <!-- Custom user select dropdown -->
+                    <div class="user-list" id="user_list">
+                        {% for user in users %}
+                            <div class="user-option" data-id="{{ user.id }}">{{ user.username }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Hidden field to store user ID -->
+                <input type="hidden" id="user_id" name="user_id" value="">
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Add Loan</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-4 text-center">
             <a href="{{ url_for('customer_portal') }}" class="btn btn-primary">Back to Portal</a>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userSearch = document.getElementById('user_search');
+            const userList = document.getElementById('user_list');
+            const userOptions = document.querySelectorAll('.user-option');
+            const userIdField = document.getElementById('user_id');
+    
+            // Function to filter user list
+            function filterUsers() {
+                const input = userSearch.value.toLowerCase().trim();
+                let isAnyMatch = false;
+                let matchedUserId = null;
+    
+                // Show only matching options
+                userOptions.forEach(option => {
+                    const username = option.textContent.toLowerCase();
+                    if (username.includes(input)) {
+                        option.style.display = 'block';
+                        isAnyMatch = true;
+                        if (username === input) {
+                            matchedUserId = option.getAttribute('data-id'); // Store exact match
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+    
+                // Show dropdown only if there are matches
+                userList.style.display = isAnyMatch ? 'block' : 'none';
+    
+                // Set the user ID only if there is an exact match
+                userIdField.value = matchedUserId || ''; 
+            }
+    
+            // Clear user ID when typing
+            userSearch.addEventListener('input', function () {
+                userIdField.value = ''; // Reset user ID if user types again
+                filterUsers();
+            });
+    
+            // Set selected user when clicking an option
+            userOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    userSearch.value = this.textContent;
+                    userIdField.value = this.getAttribute('data-id');
+                    userList.style.display = 'none'; // Hide dropdown after selection
+                });
+            });
+    
+            // Prevent form submission if no valid user is selected
+            document.querySelector('form').addEventListener('submit', function (event) {
+                if (!userIdField.value) {
+                    alert('Please select a valid user from the list or enter an exact match.');
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>

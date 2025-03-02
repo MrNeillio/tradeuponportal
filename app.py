@@ -8,7 +8,15 @@ from flask_migrate import Migrate
 from flask import make_response
 from flask import session  # Import session to clear it
 from datetime import datetime
-from sqlalchemy import DECIMAL
+from sqlalchemy import DECIMAL, func
+from werkzeug.security import generate_password_hash
+from flask_wtf import FlaskForm
+from wtforms import DecimalField, SubmitField, StringField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, NumberRange, DataRequired, Length, EqualTo, Regexp
+from flask import Flask
+from flask_cors import CORS
+from decimal import Decimal
+
 
 
 app = Flask(__name__)
@@ -18,24 +26,60 @@ app.config['REMEMBER_COOKIE_DURATION'] = 0  # Prevents long-term login persisten
 app.config['SESSION_PROTECTION'] = "strong"  # Ensure sessions are strict
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_TYPE'] = "filesystem"  # Store sessions in a file system, which resets easily
+CORS(app, origins="http://127.0.0.1")  # Allow your frontend domain
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()  # Log the user out
+    session.clear()  # Clear session data
+    response = make_response(redirect(url_for('login')))  # Redirect to login page
+    response.delete_cookie('remember_token')  # Delete cookies if set
+    response.delete_cookie('session')
+    return response
+
 login_manager.session_protection = "strong"
 
 
 
+class LogPaymentForm(FlaskForm):
+    amount = DecimalField('Payment Amount', places=2, validators=[DataRequired()])
+    is_defaulted = BooleanField('Mark as Defaulted')  # Add this line for the checkbox
+    
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    loan_id = db.Column(db.Integer, db.ForeignKey('loan.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Payment {self.id} - Loan {self.loan_id} - ${self.amount}>'
 
 # User Model
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.String(50), nullable=False)
     loyalty_points = db.Column(db.Integer, default=0)  # New field for loyalty points
+
+#REGISTER MODEL 
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=5, max=150), Regexp(r'^\S+$', message="Username cannot contain spaces.")])
+    first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=100)])
+    last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=100)])
+    phone_number = StringField('Phone Number', validators=[DataRequired(), Regexp(r'^\+?1?\d{1,15}$', message="Invalid phone number format.")])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=5), Regexp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', message="Password must be at least 8 characters, contain a number, and a special character.")])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])
+
 
 #Loan Model
 class Loan(db.Model):
@@ -111,7 +155,7 @@ def send_message():
         db.session.add(message)
         db.session.commit()
 
-        return redirect(url_for('admin_portal'))  # Redirect after sending message
+        return redirect(url_for('customer_portal'))  # Redirect after sending message
 
     return render_template('send_message.html', users=users)
 
@@ -141,8 +185,10 @@ def delete_message(message_id):
 @login_required
 def view_messages():
     messages = Message.query.filter_by(recipient_id=current_user.id).order_by(Message.timestamp.desc()).all()
+    unread_count = Message.query.filter_by(recipient_id=current_user.id, read=False).count()
+
     print(Message.body)  # This will show the body content in the terminal/log
-    return render_template('view_messages.html', messages=messages)
+    return render_template('view_messages.html', messages=messages, unread_count=unread_count)
     
     
 
@@ -228,7 +274,10 @@ def add_loan():
         db.session.add(loan)
         db.session.commit()
         
-        return redirect(url_for('customer_portal'))
+        # Flash success message
+        flash('Loan successfully added!', 'success')
+        
+        return redirect(url_for('add_loan'))
     
     return render_template('add_loan.html', users=users)
 
@@ -236,7 +285,10 @@ def add_loan():
 
 
 
+
 # USER SEARCH
+from sqlalchemy import func
+
 @app.route('/admin_search_user', methods=['GET', 'POST'])
 @login_required
 def admin_search_user():
@@ -244,43 +296,121 @@ def admin_search_user():
         return redirect(url_for('customer_portal'))  # Ensure only admins can access
 
     user = None
+    total_balance = 0  # Initialize total balance
+    active_loans = []  # Initialize active loans list
+    past_loans = []  # Initialize past loans list
+    defaulted_loans = []  # Initialize defaulted loans list
+    
     error_message = None
 
     if request.method == 'POST':
-        username = request.form['username']
-        user = User.query.filter_by(username=username).first()
+        search_query = request.form.get('search_query', '').strip().lower()  # Use .get() to avoid KeyError
 
-        if not user:
-            error_message = "User not found."
+        if search_query:
+            # Check if the search query is for a username or phone number
+            if search_query.isnumeric():  # If it's a number, we assume it's a phone number
+                user = User.query.filter(User.phone_number == search_query).first()
+            else:
+                # Search by exact username or by both first name and last name together
+                name_parts = search_query.split()
+                if len(name_parts) == 2:  # We expect both first and last name
+                    first_name, last_name = name_parts
+                    user = User.query.filter(
+                        (func.lower(User.username) == search_query) |  # Apply .lower() for case-insensitive username comparison
+                        (User.phone_number == search_query) | 
+                        (func.concat(func.lower(User.first_name), ' ', func.lower(User.last_name)) == search_query)
+                    ).first()
+                else:
+                    user = User.query.filter(
+                        (func.lower(User.username) == search_query) |  # Apply .lower() for case-insensitive username comparison
+                        (User.phone_number == search_query) |
+                        (func.concat(func.lower(User.first_name), ' ', func.lower(User.last_name)) == search_query)
+                    ).first()
 
-    return render_template('admin_search_user.html', user=user, error_message=error_message)
+            if user:
+                # Calculate total outstanding balance for active loans
+                total_balance = sum(loan.loan_amount for loan in user.loans if loan.status == 'Active')
+
+                # Fetch active loans
+                active_loans = [loan for loan in user.loans if loan.status == 'Active']
+
+                # Fetch past loans (including defaulted loans)
+                past_loans = [loan for loan in user.loans if loan.status != 'Active']
+
+                # Filter out defaulted loans (ensure 'Defaulted' status is being set properly)
+                defaulted_loans = [loan for loan in past_loans if loan.status == 'Defaulted']
+            else:
+                error_message = "User not found."
+        else:
+            error_message = "Please enter a search query."
+
+    return render_template('admin_search_user.html', 
+                           user=user, 
+                           total_balance=total_balance, 
+                           active_loans=active_loans, 
+                           past_loans=past_loans, 
+                           defaulted_loans=defaulted_loans, 
+                           error_message=error_message)
 
 
+
+
+
+
+
+
+
+# PAYMENT LOG
 # PAYMENT LOG
 @app.route('/log_payment/<int:loan_id>', methods=['GET', 'POST'])
 @login_required
 def log_payment(loan_id):
-    if current_user.role != 'admin':
-        return redirect(url_for('customer_portal'))  # Restrict non-admin users
-    
-    loan = Loan.query.get_or_404(loan_id)  # Get the loan or return a 404 if not found
+    loan = Loan.query.get_or_404(loan_id)
+    form = LogPaymentForm()
 
-    if request.method == 'POST':
-        payment_amount = float(request.form['payment_amount'])
+    if request.method == 'POST' and form.validate_on_submit():
+        payment_amount = form.amount.data
 
-        # Ensure the payment is less than or equal to the loan amount
-        if payment_amount <= loan.loan_amount:
-            loan.loan_amount -= payment_amount
+        # Convert the payment_amount to Decimal
+        payment_amount = Decimal(payment_amount)
 
-            if loan.loan_amount <= 0:
-                loan.loan_amount = 0
-                loan.status = 'Settled'  # Mark loan as settled
-                loan.settled_date = datetime.now().date()
+        # Check if payment_amount is greater than loan_amount
+        if payment_amount > loan.loan_amount:
+            flash('Payment amount cannot be greater than the loan amount.', 'danger')
+            return redirect(url_for('admin_search_user', loan_id=loan.id))  # Redirect back to the payment form
 
-            db.session.commit()
-            return redirect(url_for('admin_search_user'))  # Redirect after logging the payment
+        # Log the new payment
+        new_payment = Payment(loan_id=loan.id, amount=payment_amount, timestamp=datetime.utcnow())
+        db.session.add(new_payment)
 
-    return render_template('log_payment.html', loan=loan)
+        # Ensure loan.loan_amount is also a Decimal
+        loan.loan_amount = Decimal(loan.loan_amount) - payment_amount  # Convert both to Decimals
+
+        # If the loan is settled, update status
+        if loan.loan_amount <= 0:
+            loan.loan_amount = Decimal('0.00')
+            loan.status = 'Settled'
+            loan.settled_date = datetime.now().date()
+
+        # Check if the payment is marked as defaulted
+        is_defaulted = form.is_defaulted.data  # Check if the checkbox is ticked
+
+        if is_defaulted:
+            loan.status = 'Defaulted'  # Set the loan status to Defaulted
+            loan.loan_amount = Decimal('0.00')  # Set the loan balance to 0
+
+        db.session.commit()
+
+        # Flash success message
+        flash('Payment logged successfully and balance updated!', 'success')
+        return redirect(url_for('admin_search_user'))  # Redirect after successful payment
+
+    return render_template('log_payment_form.html', form=form, loan=loan)
+
+
+
+
+
 
 
 # OUTSTANDING BALANCE ROUTE
@@ -296,13 +426,8 @@ def outstanding_balance():
 
 
 
-# ACTIVE LOANS ROUTE
 
-@app.route('/active_loans')
-@login_required
-def active_loans():
-    loans = Loan.query.filter_by(user_id=current_user.id, status='Active').all()
-    return render_template('active_loans.html', loans=loans)
+
 
 
 
@@ -310,11 +435,22 @@ def active_loans():
 
 # PAST LOANS ROUTE
 
-@app.route('/past_loans')
+@app.route('/active_loans')
 @login_required
-def past_loans():
-    loans = Loan.query.filter_by(user_id=current_user.id, status='Settled').all()
-    return render_template('past_loans.html', loans=loans)
+def active_loans():
+    # Get active loans
+    active_loans = Loan.query.filter_by(user_id=current_user.id, status='Active').all()
+
+    # Get past loans
+    past_loans = Loan.query.filter(
+        Loan.user_id == current_user.id, 
+        Loan.status.in_(['Settled', 'Defaulted'])
+    ).all()
+
+    # Render the active_loans.html template with both active and past loans
+    return render_template('active_loans.html', active_loans=active_loans, past_loans=past_loans)
+
+
 
 
 
@@ -403,7 +539,9 @@ def change_role():
         if 'change_role' in request.form:  # When changing role
             username = request.form['username']
             new_role = request.form['new_role']
-            selected_user = User.query.filter_by(username=username).first()
+            
+            # Case-insensitive search (using ilike for PostgreSQL or lower() for MySQL)
+            selected_user = User.query.filter(User.username.ilike(f'%{username}%')).first()
 
             if selected_user:
                 # Prevent admin from changing their own role
@@ -418,11 +556,14 @@ def change_role():
 
         else:  # When searching for a user
             username = request.form['username']
-            selected_user = User.query.filter_by(username=username).first()
+            
+            # Case-insensitive search (using ilike for PostgreSQL or lower() for MySQL)
+            selected_user = User.query.filter(User.username.ilike(f'%{username}%')).first()
             if not selected_user:
                 error_message = "User not found."
 
     return render_template('change_role.html', selected_user=selected_user, error_message=error_message)
+
 
 
 
@@ -436,7 +577,10 @@ def change_role():
 @app.route('/customer_portal')
 @login_required
 def customer_portal():
-    return render_template('customer_portal.html')
+
+    unread_message_count = Message.query.filter_by(recipient_id=current_user.id, read=False).count()
+    
+    return render_template('customer_portal.html', unread_message_count=unread_message_count)
 
 
 # LOGIN ROUTE
@@ -447,7 +591,7 @@ def login():
         return redirect(url_for('customer_portal'))
 
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].strip().lower()  # Normalize to lowercase
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
 
@@ -466,48 +610,41 @@ def login():
 
 
 
-# REGISTER ROUTE
-
+# Register Route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        # Normalize the username to lowercase
+        username = form.username.data.strip().lower()
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        phone_number = form.phone_number.data
+        password = form.password.data
+        role = 'customer'  # Default role for new users
+        loyalty_points = 0
+
+        # Hash the password
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        # Check if the username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists. Please choose a different one.', 'danger')
+            return redirect(url_for('register'))
+
+        # Create the new user
+        new_user = User(username=username, first_name=first_name, last_name=last_name, phone_number=phone_number, password=hashed_password, role=role, loyalty_points=loyalty_points)
         
-        if password == confirm_password:
-            # Check if it's the first user in the database
-            first_user = User.query.first()  # Get the first user in the database (if any)
-            
-            # If there's no user, assign admin role to the first user
-            if not first_user:
-                role = 'admin'
-            else:
-                role = 'customer'
-            
-            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-            new_user = User(username=username, password=hashed_password, role=role)
-            db.session.add(new_user)
-            db.session.commit()
-            
-            # Debug: Check if the user was added and the role is correctly assigned
-            print(f"New user created: {new_user.username} with role {new_user.role}")
-            
-            return redirect(url_for('login'))
-        
-    return render_template('register.html')
+        # Add the new user to the database
+        db.session.add(new_user)
+        db.session.commit()
 
+        flash('Your account has been created! You can now log in.', 'success')
+        return redirect(url_for('login'))
 
-@app.route('/logout', methods=['GET', 'POST'])  # Accept POST requests too
-@login_required
-def logout():
-    logout_user()
-    session.clear()  # Clears all session data
-    response = make_response(redirect(url_for('login')))
-    response.delete_cookie('remember_token')
-    response.delete_cookie('session')
-    return response
-
+    return render_template('register.html', form=form)
 
 
 

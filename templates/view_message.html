@@ -6,7 +6,7 @@
     <title>{{ message.subject }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body style="background-color: #b0e1e7;">
 
     <div class="container mt-5">
         <!-- Message Header -->
@@ -31,28 +31,37 @@
                 <h4>Reply to Message</h4>
             </div>
             <div class="card-body">
+                <!-- Reply Form -->
                 <form method="POST" action="{{ url_for('view_message', message_id=message.id) }}">
                     <div class="mb-3">
                         <label for="subject" class="form-label">Subject:</label>
                         <input type="text" id="subject" name="subject" class="form-control" required value="Re: {{ message.subject }}">
                     </div>
-
+        
                     <div class="mb-3">
                         <label for="body" class="form-label">Message Body:</label>
                         <textarea id="body" name="body" class="form-control" rows="5" required></textarea>
                     </div>
-
-                    <button type="submit" class="btn btn-success">Send Message</button>
+        
+                    <!-- Buttons in the same row -->
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success">Send Message</button>
+                    </div>
                 </form>
+
+                <!-- Delete Message Form -->
+                <div class="d-flex justify-content-between mt-3">
+                    <form method="POST" action="{{ url_for('delete_message', message_id=message.id) }}">
+                        <button type="submit" class="btn btn-danger">Delete Message</button>
+                    </form>
+                </div>
+
             </div>
         </div>
 
-        <!-- Delete Message Button -->
-        <div class="d-flex justify-content-end">
-            <form method="POST" action="{{ url_for('delete_message', message_id=message.id) }}">
-                <button type="submit" class="btn btn-danger">Delete Message</button>
-            </form>
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('customer_portal') }}" class="btn btn-primary">Back to Messages</a>
         </div>
-    </div>
-
-    <!--
+    
+</body>
+</html>

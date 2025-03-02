@@ -5,8 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loyalty Points</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .custom-select-wrapper {
+            position: relative;
+        }
+        .custom-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .user-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            display: none;
+            z-index: 1000;
+        }
+        .user-list div {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .user-list div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body style="background-color: #b0e1e7;">
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">Loyalty Points</h2>
@@ -14,7 +45,7 @@
         <div class="card shadow-sm p-4 rounded bg-white mb-4">
             <h3 class="card-title text-center">Your Loyalty Points</h3>
             <div class="text-center">
-                <p class="display-4 font-weight-bold">{{ current_user.loyalty_points }}</p> <!-- Large font for points -->
+                <p class="display-4 font-weight-bold">{{ current_user.loyalty_points }}</p> 
             </div>
         </div>
 
@@ -23,12 +54,16 @@
             <h3 class="card-title">Add Loyalty Points</h3>
             <form method="POST">
                 <div class="mb-3">
-                    <label for="user_id" class="form-label">Select User:</label>
-                    <select name="user_id" id="user_id" class="form-select" required>
-                        {% for user in users %}
-                            <option value="{{ user.id }}">{{ user.username }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="user_search" class="form-label">Select User:</label>
+                    <div class="custom-select-wrapper">
+                        <input type="text" id="user_search" class="custom-select" placeholder="Start typing to search..." required>
+                        <div class="user-list" id="user_list">
+                            {% for user in users %}
+                                <div class="user-option" data-id="{{ user.id }}">{{ user.username }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <input type="hidden" id="user_id" name="user_id" value="">
                 </div>
 
                 <div class="mb-3">
@@ -46,8 +81,62 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS (optional, if needed) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userSearch = document.getElementById('user_search');
+            const userList = document.getElementById('user_list');
+            const userIdField = document.getElementById('user_id');
+
+            function filterUsers() {
+                const input = userSearch.value.toLowerCase().trim();
+                const userOptions = document.querySelectorAll('.user-option');
+                let isAnyMatch = false;
+                let matchedUserId = null;
+
+                userOptions.forEach(option => {
+                    const username = option.textContent.toLowerCase();
+                    if (username.includes(input)) {
+                        option.style.display = 'block';
+                        isAnyMatch = true;
+                        if (username === input) {
+                            matchedUserId = option.getAttribute('data-id');
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+
+                userList.style.display = isAnyMatch ? 'block' : 'none';
+                userIdField.value = matchedUserId || '';
+            }
+
+            userSearch.addEventListener('input', function () {
+                userIdField.value = '';
+                filterUsers();
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!userList.contains(event.target) && event.target !== userSearch) {
+                    userList.style.display = 'none';
+                }
+            });
+
+            document.getElementById('user_list').addEventListener('click', function (event) {
+                if (event.target.classList.contains('user-option')) {
+                    userSearch.value = event.target.textContent;
+                    userIdField.value = event.target.getAttribute('data-id');
+                    userList.style.display = 'none';
+                }
+            });
+
+            document.querySelector('form').addEventListener('submit', function (event) {
+                if (!userIdField.value) {
+                    alert('Please select a valid user from the list.');
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

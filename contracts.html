@@ -1,0 +1,1226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+        <center><img src="https://i.imgur.com/WZ0sDrO.png" Trade Upon logo/></center>
+        <title>Trade Upon Contracts</title>
+    <style>
+        /* Set background color for the body */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            /* Full viewport height */
+            position: relative;
+            /* Set relative positioning to the body */
+        }
+
+
+        /* Position the image in the top right corner */
+        img {
+            width: 250px;
+            /* Image width */
+            height: 250px;
+            
+        }
+    </style>
+</head>
+</head>
+
+<body>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .center-top {
+            text-align: center;
+            /* Center text horizontally */
+            margin: 0;
+            /* Remove default margins */
+            padding-top: 10px;
+            /* Optional: Add some spacing from the top */
+        }
+    </style>
+    <div class="center-top">
+        <h1>Trade Upon Contracts</h1>
+        <p>If you find any issues or have a suggestion, contact <b>MrNeillio</b> on Discord</p>
+    </div>
+
+
+    <!-- Navigation Buttons -->
+    <div class="container mt-3 d-flex justify-content-center" id="navigationBar">
+    
+        <button class="btn btn-success me-2" onclick="showSection('arrestReportSection', this)">Pawn Contract</button>
+        <button class="btn btn-secondary me-2" onclick="showSection('SalesReceipt', this)">Sales Receipt</button>
+        <button class="btn btn-secondary me-2" onclick="showSection('MortgageContract', this)">Mortgage Contract</button>
+        
+        
+    </div>
+
+
+
+    </div>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Background Color Example</title>
+        <style>
+            body {
+                background-color: #87CEEB;
+                /* Dark red */
+                color: rgb(0, 0, 0);
+                /* White text */
+            }
+        </style>
+    </head>
+
+
+    <!-- Arrest Report Section -->
+    
+    <div id="arrestReportSection" class="container mt-3 myHideableSection">
+        <div class="card" style="background-color: #87CEEB; color: rgb(2, 2, 2);">
+            <div class="CENTER">
+                <!-- Arrest Report Form Fields -->
+                <div class="center-top">
+                    <h2>Applicant Details</h2>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Full Name:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="txtApplicantFullName" class="form-control" style="width: 500px"
+                            placeholder="John Doe" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Date of Birth:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="ApplicantDOB" class="form-control" style="width: 500px"placeholder="eg. 04/DEC/2024" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Mailing Address:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="ApplicantAddress" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Phone Number:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="ApplicantPhone" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+
+
+                <div class="center-top">
+                    <h2>Loan Details</h2>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Loan Amount:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="LoanAmount" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Interest Rate:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="LoanInterest" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Total Amount Due:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="LoanTotalDue" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Repayment Date:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="LoanRepaymentDate" class="form-control" style="width: 500px"placeholder="eg. 04/DEC/2024" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Purpose of Loan:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="LoanPurpose" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+
+
+                
+                <!-- Collateral Section -->
+                <div class="center-top">
+                    <h2>Collateral Details ( Pawn Item(s) )</h2>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Collateral Total Value:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="CollateralEstimatedTotal" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Items & Value:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="ItemAndValue" class="form-control" style="width: 500px" placeholder="eg. Kamacho ($500000)"/>
+                        
+
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-primary" onclick="addCharge()">Add</button>
+                            <button type="button" class="btn btn-danger" onclick="removeLastCharge()">Remove
+                                Last</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- List of Collateral -->
+                <div class="row mb-4">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <ul id="ItemsAndValue" style="list-style-type: none; padding-left: 0; margin-top: 10px;"></ul>
+                    </div>
+                </div>
+                <div class="center-top">
+                    <h2>Signature Details</h2>
+                </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Employee Name:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="EmployeeName" class="form-control" style="width: 500px" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Employee DOB:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="EmployeeDOB" class="form-control" style="width: 500px"placeholder="eg. 04/DEC/2024" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Date Signed:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="DateSigned" class="form-control" style="width: 500px"placeholder="eg. 04/DEC/2024" />
+                    </div>
+                </div>
+                
+                
+                    
+
+                <!-- Proof of RP -->
+                <div class="center-top">
+                    <h2>(( Proof of RP (MUST UPLOAD PROOF OF RP FOR CONTRACT TO BE VALID) ))</h2>
+                </div>
+                 <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">(( Contract Signing Proof of RP :))</div>
+                    <div class="col-md-4">
+                        <input type="text" id="txtProofOfRPPawn" class="form-control mb-2" style="width: 600px" placeholder="Enter image URL or use the button below to Upload from your PC" />
+                        <button class="btn btn-success" id="uploadProofOfRPPawn">Upload Image</button>
+                        <p id="proofOfRPPawn" class="mt-2"></p>
+                    </div>
+                </div>
+                
+
+                <!-- Submit Button -->
+                <div class="row mb-4">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button type="button" id="btnSubmitArrestReport" onClick="submitArrestReport();"
+                            class="btn btn-success">
+                            Submit and copy to clipboard
+                        </button>
+                        <p id="copyArrestReportSuccess"></p>
+                        <textarea id="displayArrestReportBB" class="form-control " readonly style="width: 500px"
+                            rows="10">BBCode will appear here</textarea> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Sales Receipt (Initially Hidden) -->
+     <div id="SalesReceipt" class="container mt-3 myHideableSection" style="display: none;">
+        <div class="card" style="background-color: #87CEEB; color: rgb(2, 2, 2);">
+            <div class="center">
+                <div class="center-top">
+                    <h2>Sales Receipt Information</h2>
+                </div>
+
+                <!-- Sales Receipt Form Fields -->
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Customers Name:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="txtCustomersName" class="form-control" style="width: 600px"
+                            placeholder="John Doe" />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Product:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="txtProductName" class="form-control" style="width: 600px"
+                            placeholder="Name of Product that has been Purchased or Sold" />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Receipt Number:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="txtReceiptNumber" class="form-control" style="width: 600px"
+                            placeholder="(This is the row number within the Trade Upon Form Entries Google Sheet)" />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Date:</div>
+                    <div class="col-md-4">
+                        <input type="text" id="txtReceiptDate" class="form-control" style="width: 600px"
+                            placeholder="eg. 04/DEC/2024" />
+                    </div>
+                </div>
+
+
+                <!--Radio Button for Buy or Sell-->
+
+                <div class="row mb-4">
+                    <div class="col-md-4" style="font-weight: bold; text-align: right;">Is customer Buying or Selling?:</div>
+                    <div class="col-md-4">    
+                        <input class="form-check-input" type="checkbox" name="transactionType" id="BuyButton1" onchange="toggleCheckbox('SellButton1')">
+                        <label class="form-check-label" for="BuyButton1">Buying</label>
+        
+                        <input class="form-check-input" type="checkbox" name="transactionType" id="SellButton1" onchange="toggleCheckbox('BuyButton1')">
+                        <label class="form-check-label" for="SellButton1">Selling</label>
+                    </div>
+                </div>
+            
+                
+                               
+                <!-- Submit Button -->
+                <div class="row mb-4">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button type="button" id="btnSalesReceipt" onClick="submitSalesReceipt();"
+                            class="btn btn-success">
+                            Submit and copy to clipboard
+                        </button>
+                        <p id="copySalesReceiptSuccess"></p>
+                        <textarea id="displaySalesReceiptBB" class="form-control" style="width: 600px"
+                            rows="10">BBCode for Sales Receipt will appear here.</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+             
+
+                <!-- MORTGAGE CONTRACT FORM -->
+    
+    <div id="MortgageContract" class="container mt-3 myHideableSection" style="display: none;">
+    <div class="card" style="background-color: #87CEEB; color: rgb(2, 2, 2);">
+        <div class="CENTER">
+            <!-- Mortgage Contract Form Fields -->
+            <div class="center-top">
+                <h2>COMING SOON</h2>
+            </div>
+        </div>
+    </div>
+
+                
+
+
+
+    
+            
+                
+    <script>
+
+        // Operator codes and their corresponding text values
+const operatorDetails = {
+    "44012582": "Ed Timpson - Manager",
+    "1589": "Gabriel Zander - Manager",
+    "1793": "Trainee - Training Code"
+};
+
+function getValidOperatorCode() {
+    let attempts = 0;
+    let operatorCode;
+
+    while (attempts < 3) {
+        operatorCode = prompt("Please enter your operator code:");
+        if (operatorCode === null) {
+            // User clicked "Cancel"
+            return null;
+        }
+
+        if (operatorDetails[operatorCode]) {
+            // Valid code entered
+            return operatorCode;
+        } else {
+            alert(`Invalid operator code. Attempts left: ${2 - attempts}`);
+            attempts++;
+        }
+    }
+
+    alert("Too many invalid attempts. Submission canceled.");
+    return null;
+}
+
+
+        function submitVIPReport() {
+            const agentInCharge = document.getElementById('txtVIPAgentInCharge').value;
+            const agentsIncluded = document.getElementById('txtVIPAgentsIncluded').value;
+            const threatLevel = document.getElementById('txtVIPThreatLevel').value;
+            const dateAndTime =
+document.getElementById('dateAndTime').value;            
+             // Correct ID
+            const weaponry = document.getElementById('txtVIPWeaponry').value;
+            const comments = 
+document.getElementById('txtVIPComments').value;
+            const vipNames = document.getElementById('txtVIPNames').value;
+            const requestedServices = document.getElementById('txtVIPRequestedServices').value;
+            const destinations = document.getElementById('txtVIPDestinations').value;
+            const vehiclesUsed = document.getElementById('txtVIPVehiclesUsed').value;
+            const useOfForce = document.getElementById('txtVIPUseOfForce').value;
+            const missionSummary = document.getElementById('txtVIPMissionSummary').value;
+
+
+
+            // Display the BBCode in the textarea
+            document.getElementById('displayVIPReportBB').value = vipReportBBCode;
+
+            // Copy BBCode to clipboard
+            navigator.clipboard.writeText(vipReportBBCode).then(() => {
+                document.getElementById("copyVIPReportSuccess").textContent = "BBCode copied to clipboard!";
+            });
+        }
+
+            // Event listener for Incident Report
+document.getElementById('uploadProofOfRPPawn').addEventListener('click', function () {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.click();
+
+    input.addEventListener('change', function () {
+        const file = input.files[0];
+        if (file) {
+            uploadToImgur(file, 'proofOfRPPawn', 'txtProofOfRPPawn');
+        } else {
+            document.getElementById('proofOfRPPawn').innerText = 'No file selected.';
+        }
+    });
+});
+        
+
+
+        // Charges Section Logic
+        function addChargeWarrant() {
+            const chargeInput = document.getElementById('txtChargesWarrant');
+            const chargesList = document.getElementById('chargesListWarrant');
+
+            if (chargeInput.value.trim() !== '') {
+                const li = document.createElement('li');
+                li.textContent = chargeInput.value;
+                li.classList.add('mb-2');
+                chargesList.appendChild(li);
+                chargeInput.value = ''; // Clear input
+            }
+        }
+
+        function removeLastChargeWarrant() {
+            const chargesList = document.getElementById('chargesListWarrant');
+            if (chargesList.lastChild) {
+                chargesList.removeChild(chargesList.lastChild);
+            }
+        }
+
+        // Officers Section
+        function addOfficerWarrant() {
+            const officerInput = document.getElementById('txtOfficersWarrant');
+            const officersList = document.getElementById('officersListWarrant');
+
+            if (officerInput.value.trim() !== '') {
+                const li = document.createElement('li');
+                li.textContent = officerInput.value;
+                li.classList.add('mb-2');
+                officersList.appendChild(li);
+                officerInput.value = ''; // Clear input
+            }
+        }
+
+        function removeLastOfficerWarrant() {
+            const officersList = document.getElementById('officersListWarrant');
+            if (officersList.lastChild) {
+                officersList.removeChild(officersList.lastChild);
+            }
+        }
+
+
+        // Function to add Illegal Possession to the list
+        function addIllegalPossession() {
+            const item = document.getElementById("txtIllegalPossessions").value.trim();
+            if (item === "") {
+                alert("Please enter an illegal possession before adding.");
+                return;
+            }
+
+
+            const list = document.getElementById("illegalPossessionsList");
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            list.appendChild(listItem);
+
+            // Clear input field
+            document.getElementById("txtIllegalPossessions").value = "";
+        }
+
+        // Function to remove the last Illegal Possession from the list
+        function removeLastIllegalPossession() {
+            const list = document.getElementById("illegalPossessionsList");
+            if (list.lastChild) {
+                list.removeChild(list.lastChild);
+            } else {
+                alert("No illegal possessions to remove.");
+            }
+        }
+
+        // Function to add Legal Possession to the list
+        function addLegalPossession() {
+            const item = document.getElementById("txtLegalPossessions").value.trim();
+            if (item === "") {
+                alert("Please enter a legal possession before adding.");
+                return;
+            }
+
+            const list = document.getElementById("legalPossessionsList");
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            list.appendChild(listItem);
+
+            // Clear input field
+            document.getElementById("txtLegalPossessions").value = "";
+        }
+
+        // Function to remove the last Legal Possession from the list
+        function removeLastLegalPossession() {
+            const list = document.getElementById("legalPossessionsList");
+            if (list.lastChild) {
+                list.removeChild(list.lastChild);
+            } else {
+                alert("No legal possessions to remove.");
+            }
+        }
+
+        // Function to add a charge to the list
+        function addCharge() {
+            const chargeText = document.getElementById("ItemAndValue").value.trim();
+            if (chargeText === "") {
+                alert("Please enter an Item before adding.");
+                return;
+            }
+
+            // Create a new list item
+            const chargesList = document.getElementById("ItemsAndValue");
+            const listItem = document.createElement("li");
+            listItem.textContent = chargeText;
+            chargesList.appendChild(listItem);
+
+            // Clear the text area after adding the charge
+            document.getElementById("ItemAndValue").value = "";
+        }
+
+        // Function to remove the last charge from the list
+        function removeLastCharge() {
+            const chargesList = document.getElementById("ItemsAndValue");
+            if (chargesList.lastChild) {
+                chargesList.removeChild(chargesList.lastChild);
+            } else {
+                alert("No charges to remove.");
+            }
+        }
+
+        // Add officer to the list
+        function addArrestOfficer() {
+            const officerName = document.getElementById("txtArrestOfficersInvolved").value;
+            const officersList = document.getElementById("arrestOfficersList");
+
+            if (officerName.trim() === "") {
+                alert("Please enter an officer's name before adding.");
+                return;
+            }
+
+            // Create a new list item for the officer
+            const listItem = document.createElement("li");
+            listItem.textContent = officerName;
+            listItem.style.marginBottom = "5px"; // Optional: Add some spacing between items
+            officersList.appendChild(listItem);
+
+            // Clear the input field
+            document.getElementById("txtArrestOfficersInvolved").value = "";
+        }
+
+        // Remove the last officer from the list
+        function removeLastArrestOfficer() {
+            const officersList = document.getElementById("arrestOfficersList");
+
+            // Check if the list has any items
+            if (officersList.lastChild) {
+                officersList.removeChild(officersList.lastChild);
+            } else {
+                alert("No officers to remove.");
+            }
+        }
+
+        // Store the selected incident outcome
+        let incidentOutcome = "";
+
+        // Function to set the incident outcome
+        function setIncidentOutcome(outcome) {
+            incidentOutcome = outcome;
+            document.getElementById('selectedOutcome').textContent = `Selected Outcome: ${outcome}`;
+        }
+
+       // Function to add an officer to the list
+function addOfficer() {
+    const officerName = document.getElementById('txtOfficersInvolved').value.trim();
+
+    // Check if the input is not empty
+    if (officerName !== "") {
+        // Create a new list item for the officer
+        const li = document.createElement('li');
+        li.textContent = officerName;
+
+        // Append the new list item to the officer list
+        document.getElementById('officersList').appendChild(li);
+
+        // Clear the input field
+        document.getElementById('txtOfficersInvolved').value = "";
+    }
+}
+
+function uploadToImgur() {
+    const clientId = '47e4045e5bc753e'; // Replace with your Imgur Client ID
+    const fileInput = document.getElementById('uploadPhotograph');
+    const statusElement = document.getElementById('uploadStatus');
+    const urlInput = document.getElementById('txtPhotographPossessions');
+
+    if (!fileInput.files[0]) {
+        statusElement.textContent = 'Please select a file to upload.';
+        statusElement.style.color = 'red';
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+
+    // Update status
+    statusElement.textContent = 'Uploading...';
+    statusElement.style.color = 'blue';
+
+    // Make the API request
+    fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+            Authorization: `Client-ID ${clientId}`,
+        },
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const imageUrl = data.data.link;
+                statusElement.textContent = 'Upload successful!';
+                statusElement.style.color = 'green';
+                urlInput.value = imageUrl; // Display the URL in the readonly input field
+            } else {
+                throw new Error(data.data.error);
+            }
+        })
+        .catch(error => {
+            statusElement.textContent = `Upload failed: ${error.message}`;
+            statusElement.style.color = 'red';
+        });
+}
+function uploadProofRPToImgur() {
+    const clientId = '47e4045e5bc753e'; // Replace with your Imgur Client ID
+    const fileInput = document.getElementById('uploadProofRP');
+    const statusElement = document.getElementById('uploadProofRPStatus');
+    const urlInput = document.getElementById('txtArrestProofRP');
+
+    if (!fileInput.files[0]) {
+        statusElement.textContent = 'Please select a file to upload.';
+        statusElement.style.color = 'red';
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+
+    // Update status
+    statusElement.textContent = 'Uploading...';
+    statusElement.style.color = 'blue';
+
+    // Make the API request
+    fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+            Authorization: `Client-ID ${clientId}`,
+        },
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const imageUrl = data.data.link;
+                statusElement.textContent = 'Upload successful!';
+                statusElement.style.color = 'green';
+                urlInput.value = imageUrl; // Display the URL in the readonly input field
+            } else {
+                throw new Error(data.data.error);
+            }
+        })
+        .catch(error => {
+            statusElement.textContent = `Upload failed: ${error.message}`;
+            statusElement.style.color = 'red';
+        });
+}
+
+
+// Function to remove the last officer from the list
+function remOfficer() {
+    const officersList = document.getElementById('officersList');
+    // Check if there are any items in the list
+    if (officersList.lastChild) {
+        officersList.removeChild(officersList.lastChild); // Remove the last child (officer)
+    }
+}
+
+// Script Function to make checkboxes work
+function toggleCheckbox(otherCheckboxId) {
+    const otherCheckbox = document.getElementById(otherCheckboxId);
+    if (otherCheckbox.checked) {
+        otherCheckbox.checked = false;
+    }
+}
+
+       
+// JavaScript function to generate and display the BBCode for the report
+function submitIncidentReport() {
+    const incidentDate = document.getElementById('txtIncidentDate').value;
+    const incidentDuration = document.getElementById('txtIncidentDuration').value;
+    const suspectFullName = document.getElementById('ApplicantFullName').value;
+    const suspectPhoneNumber = document.getElementById('txtSuspectPhoneNumber').value;
+
+    // Generate officers list with [*]
+    const officersInvolved = Array.from(document.getElementById('officersList').getElementsByTagName('li'))
+        .map(li => `[*] ${li.textContent}`)
+        .join("\n");
+
+    const incidentSummary = document.getElementById('txtIncidentSummary').value;
+    const proofRP = document.getElementById('txtProofRP').value;
+    const evidence = document.getElementById('txtEvidence').value;
+
+    // Assuming incidentOutcome is declared elsewhere, handle its value
+    const incidentOutcome = document.querySelector('input[name="incidentOutcome"]:checked')?.value || "No Outcome Selected";
+    const outcomeBB = incidentOutcome === "Successful"
+        ? "[highlight=green][b]Successful[/b][/highlight]"
+        : "[highlight=red][b]Unsuccessful[/b][/highlight]";
+
+   
+
+            // Output the BBCode to the text area
+            document.getElementById("displayIncidentReportBB").value = incidentReportBBCode.trim();
+            document.querySelector("#displayIncidentReportBB").select();
+            document.execCommand("copy");
+            document.getElementById("copyIncidentReportSuccess").textContent = "BBCode copied to clipboard!";
+        }
+
+        // JavaScript function to show the specific section
+        function showSection(sectionId, button) {
+            // Hide all sections
+            $('.container').hide();
+
+            // Show the selected section
+            $('#' + sectionId).show();
+
+            // Reset all buttons inside #navigationBar to btn-secondary
+            $('#navigationBar .btn').removeClass('btn-success').addClass('btn-secondary');
+
+            // Highlight the clicked button with btn-success
+            $(button).removeClass('btn-secondary').addClass('btn-success');
+        }
+
+
+        // JavaScript function to generate and display the BBCode for the arrest report
+        function submitArrestReport() {
+            const ApplicantFullName = $('#txtApplicantFullName').val();
+            const ApplicantDOB = $('#ApplicantDOB').val();
+            const ApplicantAddress = $('#ApplicantAddress').val();
+            const ApplicantPhone = $('#ApplicantPhone').val();
+            const LoanAmount = $('#LoanAmount').val();
+            const LoanInterest = $('#LoanInterest').val();
+            const LoanTotalDue = $('#LoanTotalDue').val();
+            const LoanRepaymentDate = $('#LoanRepaymentDate').val();
+            const LoanPurpose = $('#LoanPurpose').val();
+            const CollateralEstimatedTotal = $('#CollateralEstimatedTotal').val();
+            const DateSigned = $('#DateSigned').val();
+            const EmployeeName= $('#EmployeeName').val();
+            const EmployeeDOB= $('#EmployeeDOB').val();
+            const txtProofOfRPPawn= $('#txtProofOfRPPawn').val();
+            const ItemsAndValue = $('#ItemsAndValue li').map(function () {
+                return $(this).text();
+            }).get().join(" | ");
+            const officersInvolvedList = $('#arrestOfficersList li').map(function () {
+                return $(this).text();
+            }).get().join("\n[*] ");
+            const summary = $('#txtArrestSummary').val();
+            const illegalPossessions = $('#illegalPossessionsList li').map(function () {
+                return $(this).text();
+            }).get().join("\n[b] Exhibit [/b] ");
+            const legalPossessions = $('#legalPossessionsList li').map(function () {
+                return $(this).text();
+            }).get().join("\n[b] Exhibit [/b]");
+            const photographPossessions = $('#txtPhotographPossessions').val();
+            const proofRP = $('#txtArrestProofRP').val();
+            const bodycamFootage = $('#txtArrestBodycamFootage').val();
+
+
+
+
+            // Construct the BBCode for PAWN Loans
+            const arrestReportBBCode = `[img]https://i.imgur.com/NZmTs4U.png[/img]
+[divbox=powderblue]
+[color=powderblue]....[/color][fimg=150,150]https://i.imgur.com/WZ0sDrO.png[/fimg]
+[float=right]
+[right]
+
+[size=150][b]Trade Upon[/size][/b]
+[size=115]Pawn Agreement[/size]
+[/right]
+[/float]
+[/divbox]
+
+[divbox=Skyblue][b] Party 1- "Lender"[/b][/divbox]
+
+[divbox=powderblue][list=none]
+[*][b]Name:[/b] ${EmployeeName} (Trading as Trade Upon)
+[*][b]Date of Birth:[/b] ${EmployeeDOB}
+[*][b]Mailing Address:[/b] Trade Upon
+[*][b]Contact Information:[/b] 2353287
+[/divbox]
+[divbox=Skyblue][b] Party 2- "Borrower"[/b][/divbox]
+
+[divbox=powderblue][list=none]
+[*][b]Name:[/b] ${ApplicantFullName}
+[*][b]Date of Birth:[/b] ${ApplicantDOB}
+[*][b]Mailing Address:[/b] ${ApplicantAddress}
+[*][b]Contact Information:[/b] ${ApplicantPhone}
+[/list][/divbox]
+
+[divbox=Skyblue][b]Loan Specifics[/b][/divbox]
+[divbox=powderblue][list=none]
+[*][b]Loan Amount:[/b] ${LoanAmount}
+[*][b]Interest Rate (0%-80%):[/b] ${LoanInterest}
+[*][b]Total Amount Due:[/b] ${LoanTotalDue}
+[*][b]Repayment Date:[/b] ${LoanRepaymentDate}
+[*][b]Purpose of Loan:[/b] ${LoanPurpose}
+[/list][/divbox]
+
+[divbox=Skyblue][b]Collateral[/b][/divbox]
+[divbox=powderblue][list=none]
+[*][b]Total Collateral Estimated Worth:[/b] ${CollateralEstimatedTotal}
+[*][b]Supporting Items & Collateral:[/b] ${ItemsAndValue}
+[/list][/divbox]
+
+[divbox=Skyblue][b]Terms of Agreement[/b][/divbox]
+[divbox=powderblue][list=I]
+
+[*][b]Payment Plan:[/b] 
+
+[list=none]The [b]BORROWER[/b] agrees to pay the [b]LENDER[/b] [b]${LoanTotalDue}[/b] by the Repayment Due Date. 
+
+Failing to pay will result in notice being issued to the [b]BORROWER[/b] by the [b]LENDER[/b] of their failure to pay. It is the duty of the [b]BORROWER[/b] to pay the [b]LENDER[/b] the outstanding amount by the due date. Failing to pay by the Repayment Due Date will result in the [b]BORROWER[/b] being declared in [b]DEFAULT[/b] as outlined in Section II. [b]DEFAULT[/b].
+
+[/list]
+
+[*][b]Default:[/b]
+
+[list=none] If the [b]BORROWER[/b] fails to pay the[b] FULL AMOUNT[/b] by the Repayment Due Date, they will be placed into [b]DEFAULT[/b], After being placed in [b]DEFAULT[/b] the [b]LENDER[/b] receives full ownership of the[b]COLLATERAL[/b] and can do as they please with it.
+
+
+
+
+
+
+[*][b]Collateral:[/b]
+
+[list=none] Any Collateral put forward shall be, upon the signature of this document, owned by the [b]LENDER[/b] and placed in the possession of the [b]LENDER[/b]
+
+Upon [b]TERMINATION[/b] of this contract the [b]LENDER[/b] shall hold the right to Sell, Dispose or do as they wish with any [b]COLLATERAL[/b]. 
+
+Upon the [b]COMPLETION[/b] of this contract the titles and ownership of the [b]COLLATERAL[/b] shall be returned to the [b]BORROWER[/b][/list]
+
+[*][b]Legal Fees:[/b] 
+
+[list=none]If either party brings an Action to enforce their rights under this agreement, the prevailing party may recover its expenses (including reasonable attorneys' fees) incurred in connection with the Action and any appeal from the losing party.[/list]
+
+[*][b]Termination:[/b]
+
+[list=none]This contract will be automatically [b]TERMINATED[/b] if the amount is not paid by the [b]Repayment Date[/b][/list]
+
+[*][b]Completion:[/b]
+
+[list=none] This contract will be considered complete upon the repayment of the full amount due with any interest or added costs[/list]
+
+[*][b]Safety:[/b]
+
+[list=none]This agreement will pass to the benefit of, and be binding upon the respective heirs, executors, administrators and successors of the [b]LENDER[/b] or the [b]BORROWER[/b][/list]
+
+[*][b]Severability:[/b]
+
+[list=none]If any part of this agreement is found to be unenforceable, the rest of this agreement will remain enforceable while any section in question will become void.[/list]
+
+[*][b]Jurisdiction:[/b]
+
+[list=none]This contract was drafted following the Penal Code and guidelines of the State of San Andreas, whose courts shall have sole jurisdiction over any and all disputes that may arise, subject to the Dispute Resolution Clause of this contract.[/list]
+
+[*][b]Sales Tax:[/b]
+[list=none]In the State of San Andreas, failure to pay sales tax is a misdemeanour crime. The Lender will have the sole responsibility, upon receiving payments from the Tenant, to document both the receipt of the payments as well as their payment of the sales tax at City Hall.[/list]
+
+[/list][/divbox]
+[divbox=Skyblue][b] Signature:[/b][/divbox]
+
+[divbox=powderblue]
+[aligntable=right,0,0,0,0,0,0][right]
+[font=Gabriola][size=200] ${ApplicantFullName} [/size][/font]
+[b]Borrower[/b]
+[b]Date:[/b] ${DateSigned}
+[/right][/aligntable]
+[font=Bradley Hand][size=200] ${EmployeeName}[/size][/font]
+[b]Lender[/b]
+[b]Date:[/b] ${DateSigned}
+[/divbox]
+
+[spoiler=(( PROOF OF RP ))]
+
+[center][img]${txtProofOfRPPawn}[/img][/center]
+
+[/spoiler]
+`;
+
+            // Display the BBCode in the textarea
+            document.getElementById('displayArrestReportBB').value = arrestReportBBCode;
+            document.querySelector("#displayArrestReportBB").select();
+            // Copy BBCode to clipboard
+            navigator.clipboard.writeText(arrestReportBBCode).then(() => {
+                document.getElementById("copyArrestReportSuccess").textContent = "BBCode copied to clipboard!";
+            });
+
+        }
+
+
+
+
+
+
+// JavaScript function to generate and display the BBCode for the Sales Receipt
+        function submitSalesReceipt() {
+            const CustomersName = $('#txtCustomersName').val();
+            const ProductName = $('#txtProductName').val();
+            const ReceiptNumber = $('#txtReceiptNumber').val();
+            const ReceiptDate = $('#txtReceiptDate').val();
+            const txtStaffName = $('#txtStaffName').val();
+            const buyChecked = document.getElementById("SellButton1").checked;
+            const sellChecked = document.getElementById("BuyButton1").checked;
+            const ApplicantAddress = $('#ApplicantAddress').val();
+            const ApplicantPhone = $('#ApplicantPhone').val();
+            const LoanAmount = $('#LoanAmount').val();
+            const LoanInterest = $('#LoanInterest').val();
+            const LoanTotalDue = $('#LoanTotalDue').val();
+            const LoanRepaymentDate = $('#LoanRepaymentDate').val();
+            const LoanPurpose = $('#LoanPurpose').val();
+            const CollateralEstimatedTotal = $('#CollateralEstimatedTotal').val();
+            const DateSigned = $('#DateSigned').val();
+            const EmployeeName= $('#EmployeeName').val();
+            const EmployeeDOB= $('#EmployeeDOB').val();
+            const txtProofOfRPPawn= $('#txtProofOfRPPawn').val();
+            const ItemsAndValue = $('#ItemsAndValue li').map(function () {
+                return $(this).text();
+            }).get().join(" | ");
+            const officersInvolvedList = $('#arrestOfficersList li').map(function () {
+                return $(this).text();
+            }).get().join("\n[*] ");
+            const summary = $('#txtArrestSummary').val();
+            const illegalPossessions = $('#illegalPossessionsList li').map(function () {
+                return $(this).text();
+            }).get().join("\n[b] Exhibit [/b] ");
+            const legalPossessions = $('#legalPossessionsList li').map(function () {
+                return $(this).text();
+            }).get().join("\n[b] Exhibit [/b]");
+            const photographPossessions = $('#txtPhotographPossessions').val();
+            const proofRP = $('#txtArrestProofRP').val();
+            const bodycamFootage = $('#txtArrestBodycamFootage').val();
+
+            const operatorCode = getValidOperatorCode();
+    if (!operatorCode) {
+        // User either canceled or exceeded attempts
+        return;
+    }
+
+    const operatorText = operatorDetails[operatorCode];
+
+if (!operatorText) {
+    alert("Invalid operator code. Please try again.");
+    return;
+    }
+
+            // Determine receipt type
+        let receiptType = "";
+    if (buyChecked) {
+        receiptType = "Buy";
+    } else if (sellChecked) {
+        receiptType = "Sales";
+    } else {
+        alert("Please select either 'Buy' or 'Sell' before submitting.");
+        return;
+    }
+   
+         let DetailsType = "";
+    if (buyChecked) {
+        DetailsType = "Buyer";
+    } else if (sellChecked) {
+        DetailsType = "Seller";
+    } else {
+        alert("Please select either 'Buy' or 'Sell' before submitting.");
+        return;
+    }
+
+
+            // Construct the BBCode for Sales Receipt
+            const SalesReceiptBBCode = `[divbox=powderblue]
+[color=powderblue]….[/color][fimg=150,150]https://i.imgur.com/WZ0sDrO.png[/fimg]
+[float=right]
+[right]
+
+[size=150][b]Trade Upon[/size][/b]
+[size=115]Thank you for choosing us![/size]
+[/right]
+[/float]
+[divbox=powderblue][/divbox]
+[divbox=powderblue]
+[divbox=powderblue][/divbox][center][b]${receiptType} Receipt[/b][/center]
+[divbox=powderblue][/divbox]
+[/divbox]
+[center]
+[divbox=powderblue][/divbox]
+[b][u]Date:[/u][/b]
+${ReceiptDate}
+[b]Receipt #: ${ReceiptNumber}[/b]
+[divbox=powderblue][/divbox]
+[/center]
+
+[divbox=powderblue]
+[divbox=powderblue][/divbox]
+[center][b]Details[/b][/center]
+[divbox=powderblue][/divbox]
+[/divbox]
+
+[divbox=powderblue][/divbox]
+
+[CENTER]
+[u][b]Customers Name:[/b] [/u]
+${CustomersName}
+
+[u][b]Item(s):[/b] [/u]
+${ProductName}
+[/CENTER]
+
+[divbox=powderblue][/divbox]
+
+[divbox=powderblue]
+[divbox=powderblue][/divbox]
+[center][b]Thank you for selling your item at Trade Upon![/b]
+[b]You were served by:[/b] ${operatorText}[/center]
+[divbox=powderblue][/divbox]
+[/divbox]
+
+[divbox=powderblue][/divbox]
+[center]We greatly appreciate your business and hope to see you again soon. Don’t forget to check out our wide selection of other great items and opportunities to buy, sell, and trade!
+
+We look forward to welcoming you back![/center]
+
+
+
+[color=powderblue]….[/color][center][fimg=150,150]https://i.imgur.com/WZ0sDrO.png[/fimg][/center]
+[float=center]
+[center]
+
+[b]Trade Upon[/b] 
+[b]Business Address:[/b] 43 Palomino Ave
+[b]Phone Number:[/b] 2353287 & 5279966
+[/divbox]
+`;
+
+            // Display the BBCode in the textarea
+            document.getElementById('displaySalesReceiptBB').value = SalesReceiptBBCode;
+            document.querySelector("#displaySalesReceiptBB").select();
+            // Copy BBCode to clipboard
+            navigator.clipboard.writeText(SalesReceiptBBCode).then(() => {
+                document.getElementById("copySalesReceiptSuccess").textContent = "BBCode copied to clipboard!";
+            });
+
+        }
+
+
+        function createGSBEmail() {
+            const theirName = $('#txtGSBTheirName').val();
+            const yourName = $('#txtGSBYourName').val();
+            const yourRank = $('#txtGSBYourRank').val();
+            const subject = $('#txtGSBSubject').val();
+            const emailText = $('#txtGSBEmailtxt').val();
+            const signatureImg = $('#txtgsbSigImg').val();
+            const badge = $('#txtgsbBadge').val();
+            let signatureSection = signatureImg
+                ? `
+Sincerely,
+[img]${signatureImg}[/img]
+[size=105]${yourName},[/size]
+[size=100][b]${yourRank} | [color=#800000]Government Security Bureau[/b][/size][/color]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[size=85]Rockford Hills City Hall, Carcer Way, Los Santos.[/size]        `
+                : `
+Sincerely,
+[size=105]${yourName},[/size]
+[size=100][b]${yourRank} | [color=#800000]Government Security Bureau[/b][/size][/color]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[size=85]Rockford Hills City Hall, Carcer Way, Los Santos.[/size]
+✉ [url=https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose&u=${badge}]${yourName}@sa.gov.us[/url]
+        `;
+
+            const emailTemplate = `
+[divbox=#E5E4E2]
+[img]https://i.imgur.com/Lp6dMi4.png[/img]
+[divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img]
+[aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=130]SAN ANDREAS STATE GOVERNMENT[/size]
+[size=115]Government Security Bureau[/size][/b]
+[size=115][i]${subject}[/i][/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+[b]${theirName},[/b]
+${emailText}
+[/list]
+[hr][/hr][list=none]
+${signatureSection}
+[/divbox]
+[divbox=white][size=80][i][b]NOTICE OF CONFIDENTIALITY[/b]: The information contained within this electronic mail message is of an exceedingly confidential nature and may contain sensitive data intended solely for the aforementioned recipient(s). Should you receive this communication inadvertently or are not the intended addressee, we request that you immediately inform the sender and delete this correspondence from your system. The contents of this electronic mail message are strictly confidential and any unauthorized disclosure, reproduction, or distribution is strictly prohibited.[/i][/size][/divbox]
+[img]https://i.imgur.com/Lp6dMi4.png[/img]
+[/divbox]
+        `;
+
+            document.getElementById("displayGSBEmailBB").value = emailTemplate.trim();
+            document.querySelector("#displayGSBEmailBB").select();
+            document.execCommand('copy');
+
+            $('#copyGSBEmailSuccess').text('Copied to clipboard!');
+        }
+
+        function submitDutyReport() {
+            const fullName = document.getElementById('txtDutyFullName').value;
+            const rank = document.getElementById('txtDutyRank').value;
+            const shiftStart = document.getElementById('txtShiftStart').value;
+            const shiftEnd = document.getElementById('txtShiftEnd').value;
+            const shiftSummary = document.getElementById('txtShiftSummary').value;
+
+            // Incident 1 details
+            const incident1Narrative = document.getElementById('txtIncident1Narrative').value;
+            const incident1Time = document.getElementById('txtIncident1Time').value;
+            const incident1Link = document.getElementById('txtIncident1Link').value;
+
+            // Incident 2 details
+            const incident2Narrative = document.getElementById('txtIncident2Narrative').value;
+            const incident2Time = document.getElementById('txtIncident2Time').value;
+            const incident2Link = document.getElementById('txtIncident2Link').value;
+
+            // Incident 3 details
+            const incident3Narrative = document.getElementById('txtIncident3Narrative').value;
+            const incident3Time = document.getElementById('txtIncident3Time').value;
+            const incident3Link = document.getElementById('txtIncident3Link').value;
+
+            // Output the BBCode to the text area
+            document.getElementById("displayDutyReportBB").value = dutyReportBBCode.trim();
+            document.querySelector("#displayDutyReportBB").select();
+            document.execCommand('copy');
+
+            $('#copyDutyReportSuccess').text('Copied to clipboard!');
+        }
+
+    </script>
+<script>
+// Imgur Client ID
+const IMGUR_CLIENT_ID = '47e4045e5bc753e'; // Replace with your actual Imgur Client ID
+
+// Universal Upload Function
+function uploadToImgur(file, statusElementId, textInputId) {
+    // Update status
+    const statusElement = document.getElementById(statusElementId);
+    statusElement.innerText = 'Uploading...';
+
+    // Create a FormData object and append the file
+    const formData = new FormData();
+    formData.append('image', file);
+
+    // Use fetch API to upload the image
+    fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+            Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+        },
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const imageUrl = data.data.link;
+
+                // Populate the input field with the image URL
+                document.getElementById(textInputId).value = imageUrl;
+
+                // Update status to success
+                statusElement.innerText = 'Image uploaded successfully!';
+            } else {
+                // Handle errors from Imgur API
+                throw new Error(data.data.error || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading image:', error);
+            // Update status to error
+            statusElement.innerText = 'Failed to upload the image. Please try again.';
+        });
+}
+
+
+</script>
+
+</body>
+
+</html>
